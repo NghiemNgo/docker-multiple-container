@@ -1,0 +1,118 @@
+version: "3"
+services:
+  # Web
+  nginx:
+    build: ./docker/nginx
+    links:
+      - php7
+      - php8
+    volumes:
+      - ../api:/var/www/api
+      - ../core:/var/www/core
+      - ../apiv2:/var/www/apiv2
+      - ../auth:/var/www/auth
+      # Logs
+      - ./docker/nginx/log:/var/log/nginx
+    ports:
+      - "82:82"
+      - "85:85"
+      - "86:86"
+      - "88:88"
+    networks:
+      - all
+
+  # PHP
+  php7:
+    build: ./docker/php
+    container_name: php7
+    volumes:
+      - ../api:/var/www/api
+      - ../core:/var/www/core
+      - ../apiv2:/var/www/apiv2
+      # Logs
+      - ./docker/php/log:/var/log/php
+    networks:
+      - all
+
+  # PHP
+  php8:
+    build: ./docker/php8
+    container_name: php8
+    volumes:
+      - ../apiv3:/var/www/apiv3
+      # Logs
+      - ./docker/php8/log:/var/log/php
+    networks:
+      - all
+
+  # #ReactJS
+  # reactjs:
+  #   build: ./docker/reactjs
+  #   volumes:
+  #     - ../react-mobx-realworld-example-app:/var/www/app
+  #   ports:
+  #     - "3000:3000"
+  #   stdin_open: true
+  #   networks:
+      # - all
+
+  # # Mongodb
+  # mongodb:
+  #   build: ./docker/mongodb
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=
+  #     - MONGO_INITDB_ROOT_PASSWORD=
+  #   volumes:
+  #     - ./docker/mongodb/db:/data/db
+  #     - ./docker/mongodb/mongo-entrypoint:/docker-entrypoint-initdb.d
+  #     - ./docker/mongodb/mongoconfig:/data/configdb
+  #   ports:
+  #     - "27017:27017"
+  #   networks:
+  #     - all
+
+  # # Mysql
+  # mysql:
+  #   build: ./docker/mysql
+  #   environment:
+  #     - MYSQL_USER=
+  #     - MYSQL_PASSWORD=
+  #     - MYSQL_ROOT_PASSWORD=
+  #     - MYSQL_ROOT_HOST=
+  #   volumes:
+  #     - ./docker/mysql/data:/var/lib/mysql
+  #   ports:
+  #     - "3306:3306"
+  #   networks:
+  #     - all
+
+  # JAVA
+  # java:
+  #   build: ./docker/java
+  #   ports:
+  #     - "87:8080"
+  #   networks:
+  #     - all
+  
+
+  # JAVA
+  # java2:
+  #   build: ./docker/java_core/live2p
+  #   ports:
+  #     - "87:8080"
+  #   networks:
+  #     - all
+
+  # JAVA
+  # jenkins:
+  #   build: ./docker/jenkins
+  #   ports:
+  #     - "8080:8080"
+  #   networks:
+  #     - jenkins
+
+networks: 
+  all:
+    driver: bridge
+  # jenkins:
+  #   driver: bridge
